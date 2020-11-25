@@ -248,6 +248,9 @@ def expand_node(node, state, sdfg):
                 node.name, str(e)))
             provider_index = 0
             actual_node_schedule = ScheduleType.Default
+    elif node.schedule == ScheduleType.FPGA_Device:
+        provider_index = 2
+        # TODO
     else:
         raise NotImplementedError(
             "ORT expansion for schedule '{}' is not implemented".format(
@@ -364,6 +367,8 @@ def expand_node(node, state, sdfg):
             mem_info = "__ort_cuda_mem_info"
         elif desc.storage == StorageType.CPU_Pinned:
             mem_info = "__ort_cuda_pinned_mem_info"
+        elif desc.storage == StorageType.FPGA_Global:
+            mem_info = "__ort_fpga_mem_info"
         else:
             raise ValueError(
                 "Unsupported storage type {} for input to ONNX node".format(
